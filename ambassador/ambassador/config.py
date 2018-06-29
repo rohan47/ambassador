@@ -1172,6 +1172,14 @@ class Config (object):
             # ...and route.
             self.add_intermediate_route(mapping['_source'], mapping, svc, cluster_name)
 
+            # If x_forwarded_proto_redirect is set, then we enable require_tls in primary listener, which in turn sets
+            # require_ssl to true in envoy config. Once set, then all requests that contain X-FORWARDED-PROTO set to
+            # https, are processes normally by envoy. In all the other cases, including X-FORWARDED-PROTO set to http,
+            # a 301 redirect response to https://host is sent
+            if mapping.get('x_forwarded_proto_redirect', False):
+                primary_listener['require_tls'] = True
+                self.logger.debug("x_forwarded_proto_redirect is set to true, enabling 'require_tls' in listener")
+
         # OK. Walk the set of clusters and normalize names...
         collisions = {}
         mangled = {}

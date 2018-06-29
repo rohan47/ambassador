@@ -88,6 +88,7 @@ Ambassador supports a number of additional attributes to configure and customize
 | `timeout_ms`              | the timeout, in milliseconds, for requests through this `Mapping`. Defaults to 3000. |
 | [`tls`](#using-tls)       | if true, tells the system that it should use HTTPS to contact this service. (It's also possible to use `tls` to specify a certificate to present to the service.) |
 | `use_websocket`           | if true, tells Ambassador that this service will use websockets |
+| `x_forwarded_proto_redirect` | if true, Ambassador lets through only the HTTP requests with `X-FORWARDED-PROTO: https` header set |
 
 Ambassador supports multiple deployment patterns for your services. These patterns are designed to let you safely release new versions of your service, while minimizing its impact on production users.
 
