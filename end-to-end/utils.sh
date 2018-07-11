@@ -144,6 +144,17 @@ initialize_namespace () {
     kubectl create namespace "$namespace"
 }
 
+switch_namespace() {
+  kubectl get namespace $1 &> /dev/null
+  if [ $? -eq 0 ]; then
+    echo "Switching to namespace: $1"
+    kubectl config set-context $(kubectl config current-context) --namespace=$1 > /dev/null
+  else
+    echo "Namespace: $1 does not exist"
+    exit 1
+  fi
+}
+
 cluster_ip () {
     IP=$(kubectl get nodes -ojsonpath="{.items[0].status.addresses[?(@.type==\"ExternalIP\")].address}")
 
